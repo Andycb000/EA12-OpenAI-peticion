@@ -1,13 +1,24 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>login</ion-title>
+    <ion-title>Login</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">login</ion-title>
+      <ion-title size="large">Login</ion-title>
     </ion-toolbar>
   </ion-header>
+</ion-content>
+
+<ion-content class="text-center">
+  <input #emailInput type="email" placeholder="Ingresa tu correo" /> <br> <br>
+  <input #passwordInput type="password" placeholder="Ingresa tu contraseña" /> <br> <br>
+  <button type="button"
+    class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
+    Iniciar sesión</button> <br>
+
+  <a href="/forgot-password" class="text-blue-600 hover:underline">¿Olvidaste tu contraseña?</a> <br>
+  <a href="/signup" class="text-blue-600 hover:underline">¿No tienes una cuenta? Regístrate</a>
 </ion-content>
