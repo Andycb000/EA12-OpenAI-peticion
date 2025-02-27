@@ -1,20 +1,37 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      EA12 - Andrea Cota - Aplicación generadora de ideas
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <!--<a href="/login" class="text-blue-600 hover:underline">Ir a iniciar sesion</a><br>-->
+
+  <ion-header>
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title>Generador de Ideas</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-content>
+    <ion-item>
+      <ion-label postition="floating">Ingresa tu idea inicial</ion-label>
+      <ion-input [(ngModel)]="ideaPrompt"
+        placeholder="Por ejemplo, 'Genera ideas para un startup de tecnologia'"></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" (click)="generateIdea()">Generar Idea</ion-button>
+
+    <ion-card ngIf="generatedIdea">
+      <ion-card-header>
+        <ion-card-title>Tu idea Generada</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        {{ generatedIdea }}
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+
 </ion-content>
