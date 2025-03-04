@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
@@ -11,7 +11,7 @@ import { AuthService } from '../auth.service';
   templateUrl: './signup.page.html',
   styleUrls: ['./signup.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonLabel, IonToolbar, CommonModule, FormsModule]
 })
 
 export class SignupPage implements OnInit {
@@ -29,19 +29,34 @@ export class SignupPage implements OnInit {
   ) { }
 
   async onSubmit() {
+    console.log('Email ingresado:', this.email); // Depuración
+    console.log('¿Es email válido?', this.validateEmail(this.email));
+
+    //verificar si el email es valido
+    if (!this.validateEmail(this.email)) {
+      const alert = await this.alertController.create({
+        header: 'Invalid Email',
+        message: 'Please enter a valid email address.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return; // Evita que continúe con el registro si el email no es válido
+    }
+
     try {
       await this.authService.register(this.email, this.password);
       const alert = await this.alertController.create({
-        header: 'Error',
-        message: 'An error occured during signup.',
+        header: 'Signup Success',
+        message: 'You have signed up successfully!',
         buttons: ['OK'],
       });
       await alert.present();
       this.router.navigate(['/login']); //Redirige al login después del registro
     } catch (error) {
+      console.error('Firebase Error:', error); // Para ver el error en la consola
       const alert = await this.alertController.create({
         header: 'Error',
-        message: 'An error occurred during the signup.',
+        message: 'An error ocurred during signup.', //nose porque siempre me aparece que ocurre un error durante el signup, pero ya esta implementado todo lo de Firebase y deberia servir
         buttons: ['OK'],
       });
       await alert.present();

@@ -1,49 +1,44 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>SignUp</ion-title>
+    <ion-title>Registro</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">SignUp</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-content class="text-center">
+  <div id="content" class="text-center">
     <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
-      <!--Campo para el email-->
-      <div class="mb-6">
-        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo</label>
-        <input type="email" id="email" name="email" ngModel
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Ingresar tu correo electrónico" required #email="ngModel" />
-        <div *ngIf="email.invalid $$ email.touched" style="color: red;">Inserta un correo válido</div>
-      </div>
+      <ion-label class="text-gray-400 text-lg font-semibold">Crear una Cuenta</ion-label><br><br>
 
-      <!--Campo para el password-->
-      <div class="mb-6">
-        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
-        <input type="password" id="password" name="password" ngModel
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="*************" required #email="ngModel" />
-      </div>
+      <!-- Input de Email -->
+      <ion-label class="text-gray-400 text-lg font-semibold">Email</ion-label><br>
 
-      <!--Botón para crear cuenta-->
-      <button type="submit"
-        class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-        [disabled]="registerForm.invalid">
-        Crear cuenta
-      </button>
+      <input class="border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400" type="email"
+        name="email" id="email" required placeholder="email@gmail.com" [(ngModel)]="email" #emailModel="ngModel" email>
+      <div *ngIf="emailModel.invalid && emailModel.touched" style="color:red;">Please enter a valid email</div><br>
+
+
+      <!-- Input de Contraseña -->
+      <ion-label class="text-gray-400 text-lg font-semibold">Contraseña</ion-label><br>
+
+      <input name="password" id="password" [(ngModel)]="password" #passwordModel="ngModel"
+        class="border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400" type="password" required
+        minlength="6" placeholder=".........">
+      <div *ngIf="passwordModel.invalid && passwordModel.touched" style="color:red;">
+        La contraseña debe tener al menos 6 caracteres.
+      </div><br><br>
+
+      <!-- Botón de Registro -->
+      <button
+        class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-semibold font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+        type="submit" [disabled]="registerForm.invalid">Registrarse</button>
     </form>
 
-    <!--Botón para hacer el login-->
     <button (click)="onSignUp()"
-      class="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-      Go to login
-    </button>
-  </ion-content>
+      class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-semibold font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+      expand="full">Go to Login</button>
+
+
+  </div>
 </ion-content>
 
 
