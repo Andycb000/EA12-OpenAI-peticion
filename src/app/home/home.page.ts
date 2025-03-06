@@ -24,4 +24,10 @@ export class HomePage {
 
     this.generatedIdea = await this.openAIService.generateIdea(this.ideaPrompt);
   }
+
+  onLogout() {
+    this.router.navigate(['login']);
+  }
+
+
 }

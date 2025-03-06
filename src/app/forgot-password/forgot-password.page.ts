@@ -1,54 +1,64 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
-
+import { IonContent, IonHeader, IonToolbar, IonTitle, IonInput, IonItem, IonList, IonLabel, IonButton } from '@ionic/angular/standalone';
+import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.page.html',
   styleUrls: ['./forgot-password.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, IonContent, IonHeader, IonToolbar, IonTitle, IonInput, IonItem, IonList, IonLabel, IonButton]
 })
 export class ForgotPasswordPage implements OnInit {
 
-  constructor(private alertController: AlertController, private router: Router) { }
+  email: string = '';
 
-  ngOnInit() { }
+  constructor(private authService: AuthService, private alertController: AlertController, private router: Router) { }
 
-  // Función que se ejecuta al hacer submit del formulario
+  ngOnInit() {
+  }
+
   async onSubmit() {
-    const email = (document.getElementById('email') as HTMLInputElement).value;
-    const password = (document.getElementById('password') as HTMLInputElement).value;
-
-    // Si el email y password son válidos, muestra un mensaje de éxito
-    if (this.validateEmail(email) && password) {
-      const alert = await this.alertController.create({
-        header: 'Reset Success',
-        message: 'You have reseted successfully!',
-        buttons: ['OK']
-      });
-      await alert.present();
-    } else {
+    if (!this.validateEmail(this.email)) {
       const alert = await this.alertController.create({
         header: 'Error',
-        message: 'Please complete all.',
-        buttons: ['OK']
+        message: 'Por favor, ingresa un correo válido.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return;
+    }
+
+    try {
+      await this.authService.resetPassword(this.email);
+      const alert = await this.alertController.create({
+        header: 'Correo Enviado',
+        message: 'Revisa tu correo para restablecer tu contraseña.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Error al enviar correo de restablecimiento:', error);
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'No se pudo enviar el correo. Verifica que el email esté registrado.',
+        buttons: ['OK'],
       });
       await alert.present();
     }
   }
 
-  // Función para validar el formato del correo
   validateEmail(email: string): boolean {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailPattern.test(email); // Retorna true si el correo es válido
+    return emailPattern.test(email);
   }
 
-  // Función para navegación
-  onSignUp() {
-    this.router.navigateByUrl('login');
+  onSignup() {
+    this.router.navigateByUrl("login")
   }
+
 }

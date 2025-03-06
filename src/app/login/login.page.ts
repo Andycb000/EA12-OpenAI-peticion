@@ -1,60 +1,68 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonItem, IonLabel } from '@ionic/angular/standalone';
-import { AlertController } from '@ionic/angular'
-import { Router } from '@angular/router'
-
+import { IonContent, IonHeader, IonToolbar, IonTitle, IonInput, IonItem, IonList, IonLabel, IonButton } from '@ionic/angular/standalone';
+import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
+import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonItem, IonLabel, CommonModule, FormsModule]
+  imports: [IonLabel, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonInput, IonItem, IonList, IonLabel, IonButton]
 })
 export class LoginPage implements OnInit {
+  email: string = '';
+  password: string = '';
 
-  constructor(private alertController: AlertController, private router: Router) { }
+  constructor(private alertController: AlertController, private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
   }
 
-  //Función que se ejecuta al hacer submit en el formulario
   async onSubmit() {
-    const email = (document.getElementById('email') as HTMLInputElement).value;
-    const password = (document.getElementById('password') as HTMLInputElement).value;
-
-    //Si el email y el password si son válidos, muestra un mensaje de éxito
-    if (this.validateEmail(email) && password) {
+    if (!this.validateEmail(this.email) || !this.password) {
       const alert = await this.alertController.create({
-        header: 'Login Success',
-        message: 'You have logged in successfully!',
+        header: 'Error',
+        message: 'Por favor, ingresa un correo y una contraseña válidos.',
         buttons: ['OK'],
       });
       await alert.present();
-    } else {
+      return;
+    }
+
+    try {
+      await this.authService.login(this.email, this.password); // Llamamos al método de login del servicio
+      const alert = await this.alertController.create({
+        header: 'Inicio de Sesión Exitoso',
+        message: '¡Bienvenido!',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      this.router.navigate(['/home']); // Redirige a la página de inicio
+    } catch (error) {
+      console.error('Error en login:', error);
       const alert = await this.alertController.create({
         header: 'Error',
-        message: 'Please check your credentials.',
+        message: 'Correo o contraseña incorrectos. Verifica tus credenciales.',
         buttons: ['OK'],
       });
       await alert.present();
     }
   }
 
-  //Función para validar el fomarto del correo
+
   validateEmail(email: string): boolean {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._%+-]+\.[a-zA-Z]{2,}$/;
-    return emailPattern.test(email); //Devuelve true si el correo es valido
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zAZ0-0.-]+\.[a-zA-Z]{2,}$/;
+    return emailPattern.test(email);
   }
 
-  //Función para navegación
-  onSignUp() {
-    this.router.navigateByUrl("signup")
+  onSignup() {
+    this.router.navigate(['/signup']);
   }
 
-  //Función para navegación
   onReset() {
-    this.router.navigateByUrl("forgot-password")
+    this.router.navigate(['/forgot-password']);
   }
 }
